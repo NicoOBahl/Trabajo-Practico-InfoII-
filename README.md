@@ -1,6 +1,6 @@
 # Trabajo-Practico-InfoII-
 
-## Memoria descrpitiva de una automatización de una compactadora.
+## Memoria descriptiva de una automatización de una compactadora.
 
 La compactadora a automatizar se encuentra dentro de una fábrica que produce envases de cartón, que posee un sistema de aspiración encargado de triturar cartón sobrante de las máquinas para luego succionarlo y llevarlo a una sala en donde cae por un tubo cuadrado de grandes dimensiones. La compactadora cumple la función de empujar este cartón hacia un contenedor para luego ser reciclado. El sistema de aspiración lleva el cartón hacia una sala 
 Ahora bien, la automatización consta de tres puntos importantes:
