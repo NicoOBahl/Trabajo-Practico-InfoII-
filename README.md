@@ -1,6 +1,6 @@
 # Trabajo-Practico-InfoII-
 
-## Memoria descriptiva de una automatización de una compactadora.
+# Memoria descriptiva de una automatización de una compactadora.
 
 La compactadora a automatizar se encuentra dentro de una fábrica que produce envases de cartón, que posee un sistema de aspiración encargado de triturar cartón sobrante de las máquinas para luego succionarlo y llevarlo a una sala en donde cae por un tubo cuadrado de grandes dimensiones. La compactadora cumple la función de empujar este cartón hacia un contenedor para luego ser reciclado. El sistema de aspiración lleva el cartón hacia una sala 
 Ahora bien, la automatización consta de tres puntos importantes:
@@ -13,3 +13,13 @@ Pueden ocurrir imprevistos como pueden ser que la compactadora no funcione, o bi
 
 ## 3. Predicción de contenedor lleno
 Cuando el contenedor se llena es retirado, para que el cartón sea reciclado, y sustituido por uno vacío. Para lograr una estimación de cuando se llenaría dicho depósito habría que hacer un conteo de la cantidad de veces que la compactadora cumple un ciclo automático. Entonces, si ocurrieron 150 ciclos, se debería encender una luz testigo, de forma que el personal pueda solicitar el cambio de contenedor y así evitar imprevistos como los mencionados en el punto 2.
+
+# Máquina de estado
+
+![./materiales/Maquina de estados.jpg](https://github.com/user-attachments/assets/b1f01575-c5dd-4e30-bcee-2f433fcb6654)
+
+- S1 y S2 son los sensores de nivel.
+- S3 es el sensor de nivel superior
+- RUN es el flag de arranque, se dará cuando se compruebe que está todo en orden o se haya restaurado alguna falla.
+- CONT es un contador que lleva la cuenta de los ciclos.
+
