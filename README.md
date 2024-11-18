@@ -16,10 +16,12 @@ Cuando el contenedor se llena es retirado, para que el cartón sea reciclado, y 
 
 # Máquina de estado
 
-![Maquina de estados v2](https://github.com/user-attachments/assets/13a48c4f-bedd-4e28-9121-0e572b22883d)
+![Maquina de estados V3](https://github.com/user-attachments/assets/401ef102-e780-48d8-8b02-8070fe0da7b1)
+
 
 - "s1" y "s2" son los sensores de nivel.
 - "s3" es el sensor de nivel superior
 - RUN es el flag de arranque, se dará cuando se compruebe que está todo en orden o se haya restaurado alguna falla.
+- RESET es el flag que normaliza todas las variables, se dará cuando el cambio de contenedor se haya completado con éxito.
 - "cont" es un contador que lleva la cuenta de los ciclos.
 
