@@ -22,6 +22,6 @@ Cuando el contenedor se llena es retirado, para que el cartón sea reciclado, y 
 - "s1" y "s2" son los sensores de nivel.
 - "s3" es el sensor de nivel superior
 - RUN es el flag de arranque, se dará cuando se compruebe que está todo en orden o se haya restaurado alguna falla.
-- RESET es el flag que normaliza todas las variables, se dará cuando el cambio de contenedor se haya completado con éxito.
+- RESET es el puslador que normaliza todas las variables, una vez que el operario complete con éxito el cambio de contenedor será pulsado.
 - "cont" es un contador que lleva la cuenta de los ciclos.
 
