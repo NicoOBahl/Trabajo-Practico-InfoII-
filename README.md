@@ -16,7 +16,8 @@ Cuando el contenedor se llena es retirado, para que el cartón sea reciclado, y 
 
 # Máquina de estado
 
-![Maquina de estados V4]([https://github.com/user-attachments/assets/401ef102-e780-48d8-8b02-8070fe0da7b1]
+!![Maquina de estados v4](https://github.com/user-attachments/assets/d48767c2-961d-4e57-9920-81287ce1b201)
+
 
 - "s1" y "s2" son los sensores de nivel.
 - "s3" es el sensor de nivel superior
