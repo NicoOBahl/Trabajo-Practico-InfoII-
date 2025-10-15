@@ -16,7 +16,7 @@ Cuando el contenedor se llena es retirado, para que el cartón sea reciclado, y 
 
 # Máquina de estado
 
-!![Maquina de estados v4](https://github.com/user-attachments/assets/d48767c2-961d-4e57-9920-81287ce1b201)
+![Maquina de estados v5](https://github.com/user-attachments/assets/0ca5e404-3e4c-40fe-a972-a84575cc3264)
 
 
 - "s1" y "s2" son los sensores de nivel.
@@ -24,4 +24,5 @@ Cuando el contenedor se llena es retirado, para que el cartón sea reciclado, y 
 - RUN es el flag de arranque, se dará cuando se compruebe que está todo en orden o se haya restaurado alguna falla.
 - RESET es el puslador que normaliza todas las variables, una vez que el operario complete con éxito el cambio de contenedor será pulsado.
 - "cont" es un contador que lleva la cuenta de los ciclos.
+- "ic" y "fc" son los finales de carrera de la compactadora.
 
