@@ -18,7 +18,7 @@ estados_t estado_inicio(int *cont_set0){
       (*cont_set0)++;
       LCD_INT(*cont_set0);
    }
-   if (PRESET && flag){
+   if (lectura_reset() && flag){
       mensaje_ciclos();
       (*cont_set0)--;
       LCD_INT(*cont_set0);
@@ -117,3 +117,4 @@ estados_t estado_deplleno(){
     }
     return deposito_lleno;
 }
+
