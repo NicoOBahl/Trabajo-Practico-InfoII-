@@ -26,3 +26,7 @@ Cuando el contenedor se llena es retirado, para que el cartón sea reciclado, y 
 - "cont" es un contador que lleva la cuenta de los ciclos.
 - "ic" y "fc" son los finales de carrera de la compactadora.
 
+# Circuito esquemático de la máquina de estados
+
+<img width="1182" height="827" alt="image" src="https://github.com/user-attachments/assets/947a4a39-dbaf-4fcb-83f8-f096cc496107" />
+
