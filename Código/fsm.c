@@ -1,73 +1,119 @@
 #include "config.h"
-#include "fsm.h"
 
-/*estados_t estado_inicio(){
-}*/
+static int etapa_ciclo = 0;
+static int etapa_deposito = 0;
+static int etapa_obstruido = 0;
 
-estados_t estado_espera (int *cont, int cont_set){ //estado de espera
-    int contador = 0;
-    //apago motor
-      while (SN1 && SN2){
-	 contador++;
-	 _delay_ms(100);         //cuento 0.1s
-	 if (contador >= 100) return ciclo_compac;       //si ambos estÃ¡n encendidos durante 10s cambio de estado
-      }
-      if (!SN1 || !SN2){
-	 contador = 0;			//si no cuento los 10 segundos vuelvo al estado de espera
-      }
-      if (SC) return deposito_obs;			//si detecta el sensor de obstruccion, cambio de estado
-      if (*cont == cont_set) return deposito_lleno;		//si el contador llega al limite, cambio de estado
-      return espera;
+static int flag = 0;
+static int flag_msj = 0;
+
+estados_t estado_inicio(int *cont_set0){
+   if (!flag){
+      mensaje_set();
+      flag = 1;
+   }
+   if (lectura_seteo() && flag) return espera;
+   if (lectura_run() && flag){
+      mensaje_ciclos();
+      (*cont_set0)++;
+      LCD_INT(*cont_set0);
+   }
+   if (lectura_reset() && flag){
+      mensaje_ciclos();
+      (*cont_set0)--;
+      LCD_INT(*cont_set0);
+   }
+   return inicio;
 }
 
-
-estados_t estado_ciccom (int *cont, int cont_set){     //estado de movimiento de compactadora
-    //giro hacia delante
-    if (IC && !FC){
-        CM1 = 1;
-        CM2 = 0;
-        CEN = 1;
+estados_t estado_espera(int *cont1, int *cont_set1){ // estado de espera
+    if (!flag_msj && !(*cont1 == *cont_set1) ){
+      mensaje_espera();
+      LCD_INT(*cont1);
+      flag_msj = 1;
     }
-    while (!FC){}			//espero que actue el fin de carrera
-    _delay_ms(1000);
-    //giro hacia atrás
-    if (!IC && FC){
-        CM1 = 0;
-        CM2 = 1;
-    }
-    while (!IC){}		//espero que actue el inicio de carrera
-      CEN=0;			//paro el motor
+    if (lectura_nivel() == ciclo_compac) return ciclo_compac; // si detecta el nivel, cambio de estado
+    if (lectura_compuerta() == deposito_obs) return deposito_obs; // si detecta el sensor de obstruccion, cambio de estado
+    if (*cont1 == *cont_set1) return deposito_lleno; // si el contador llega al limite, cambio de estado
     return espera;
+}
+
+estados_t estado_ciccom(int *cont2){
+    switch (etapa_ciclo){
+    case 0:
+        if (lectura_iniciocarrera()){
+            avance_compactadora();
+	    mensaje_avancecompac();
+            etapa_ciclo = 1;
+        }
+        break;
+    case 1:
+        if (lectura_fincarrera()){
+            retroceso_compactadora();
+	    mensaje_retrocompac();
+            etapa_ciclo = 2;
+        }
+        break;
+    case 2:
+        if (lectura_iniciocarrera()){
+            parar_motor();
+            etapa_ciclo = 0;
+	    (*cont2)++;
+	    flag_msj = 0;
+            return espera;
+        }
+        break;
+    }
+    return ciclo_compac;
 }
 
 estados_t estado_depobs(){
-    if (!IC && FC){
-       CM1 = 0;
-       CM2 = 1;
+    switch (etapa_obstruido){
+    case 0:
+        if (!lectura_iniciocarrera()){
+            retroceso_compactadora();
+            etapa_obstruido = 1;
+        } else {
+            etapa_obstruido = 1;
+        }
+        break;
+    case 1:
+        if (lectura_iniciocarrera()){
+            parar_motor();
+            activar_compuerta();
+	    aviso_obstruccion();
+            etapa_obstruido = 2;
+        }
+        break;
+    case 2:
+        if (lectura_reset_compuerta()){
+            reset_compuerta();
+            etapa_obstruido = 0;
+	    flag_msj = 0;
+            return espera;
+        }
+        break;
     }
-    while (!IC){}		//espero que actue el inicio de carrera
-      CEN=0;   
-   TESTIGO = 1;
-   ELVAL = 1;
-   //añadir mensaje en lcd
-   if (!SN1 && !SN2 && !SC && PRESET){
-      TESTIGO = 0;
-      ELVAL = 0;
-      //añadir mensaje en lcd
-      return espera;
-   }
-   return deposito_obs;
+    return deposito_obs;
 }
 
 estados_t estado_deplleno(){
-   //hago un giro hacia atras, para poner la compactadora en posicion de reposo
-    if (!IC && FC){
-       CM1 = 0;
-       CM2 = 1;
+    switch (etapa_deposito){
+    case 0: // Inicio del retroceso
+        if (lectura_fincarrera()){
+            retroceso_compactadora();
+            etapa_deposito = 1;
+        }else{
+            parar_motor();
+            etapa_deposito = 1;
+        }
+        break;
+    case 1: // Esperando volver al inicio
+	aviso_deplleno();
+        etapa_deposito = 0;
+	flag_msj = 0;
+        return espera;
+        break;
     }
-    while (!IC){}		//espero que actue el inicio de carrera
-    CEN=0;
-    TESTIGO = 1;
-    //hacer mensaje en lcd
-    return espera;
+    return deposito_lleno;
 }
