@@ -2,12 +2,47 @@
 #define CONFIG_H
 
 #include "avr_api.h"
+#include "fsm.h"
+#include "lcd_con_api.h"
 
-void inicio(); //funcion de inicializacion de micro
+extern int cont;
+extern int cont_set;
+
+extern volatile int systick_100ms;
+extern volatile int systick_10ms;
+
+estados_t lectura_nivel();	//funcion para leer los sensores de nivel
+estados_t lectura_compuerta();	//funcion para leer el sensor de la compuerta
+
+int lectura_iniciocarrera();	//lee el inicio de la carrera de la compactadora
+int lectura_fincarrera();	//lee el fin de la carrera de la compactadora
+int lectura_reset_compuerta();	//lee que se reseteen los sensores de nivel y compuerta
+int lectura_reset();		
+int lectura_run();
+int lectura_seteo();
+
+void inicio_AT();			//funcion de inicializacion de micro
+void avance_compactadora();	//ejecuta el avance de la compactadora
+void retroceso_compactadora();	//ejecuta el retrocesod de la compactadora
+void parar_motor();		//ejecuta la parada de la compactadora
+void activar_compuerta();	//ejecuta la activacion de la compuerta
+void reset_compuerta();		//ejecuta el reset de la compuerta
+
+void aviso_depok();
+void aviso_deplleno();
+void aviso_obstruccion();
+void mensaje_set();
+void mensaje_avancecompac();
+void mensaje_retrocompac();
+void mensaje_espera();
+void mensaje_ciclos();
+
+void handler_100ms();
+void handler_10ms();
 
 //Definicion de puertos y elementos a utilizar
 
-#define SyP_PORT avr_GPIO_D
+#define SyP_PORT avr_GPIO_D			//puertos de sensores y pulsadores
 
 #define SN1 avr_GPIOD_IN_0			//Sensor de nivel 1
 #define SN1_PIN avr_GPIO_PIN_0
