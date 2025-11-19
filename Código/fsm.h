@@ -12,10 +12,11 @@ typedef enum{
     deposito_lleno = 4
 }estados_t;
 
-estados_t estado_inicio(int *cont_set0);       //Estado de inicio, configuracion
-estados_t estado_espera(int *cont1, int *cont_set1);       //Estado de espera de sensores
-estados_t estado_ciccom(int *cont2);       //Estado de actua cion de la compactadora
-estados_t estado_depobs();       //Estado de depÃ³sito obstruido
+estados_t estado_inicio();       //Estado de inicio, configuracion
+estados_t estado_espera();       //Estado de espera de sensores
+estados_t estado_ciccom();       //Estado de actuacion de la compactadora
+estados_t estado_depobs();       //Estado de deposito obstruido
 estados_t estado_deplleno();      //Estado de deposito lleno
 
 #endif
+
