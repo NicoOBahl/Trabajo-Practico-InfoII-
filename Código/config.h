@@ -9,7 +9,8 @@ extern int cont;
 extern int cont_set;
 
 extern volatile int systick_100ms;
-extern volatile int systick_10ms;
+
+/* LECTURAS DEL MICRO */
 
 estados_t lectura_nivel();	//funcion para leer los sensores de nivel
 estados_t lectura_compuerta();	//funcion para leer el sensor de la compuerta
@@ -17,9 +18,11 @@ estados_t lectura_compuerta();	//funcion para leer el sensor de la compuerta
 int lectura_iniciocarrera();	//lee el inicio de la carrera de la compactadora
 int lectura_fincarrera();	//lee el fin de la carrera de la compactadora
 int lectura_reset_compuerta();	//lee que se reseteen los sensores de nivel y compuerta
-int lectura_reset();		
-int lectura_run();
-int lectura_seteo();
+int lectura_reset();        //lee el pulsador de reset		
+int lectura_run();          //lee el pulsador de run
+int lectura_seteo();        //detecta los sensores para setear el contador
+
+/* SALIDAS DEL MICRO */
 
 void inicio_AT();			//funcion de inicializacion de micro
 void avance_compactadora();	//ejecuta el avance de la compactadora
@@ -28,17 +31,20 @@ void parar_motor();		//ejecuta la parada de la compactadora
 void activar_compuerta();	//ejecuta la activacion de la compuerta
 void reset_compuerta();		//ejecuta el reset de la compuerta
 
-void aviso_depok();
-void aviso_deplleno();
-void aviso_obstruccion();
-void mensaje_set();
-void mensaje_avancecompac();
-void mensaje_retrocompac();
-void mensaje_espera();
-void mensaje_ciclos();
+/* FUNCIONES DE LCD */
+
+void aviso_depok();		//avisa que el deposito esta listo
+void aviso_deplleno();		//avisa que el deposito esta lleno
+void aviso_obstruccion();	//avisa que hubo una obstruccion
+void mensaje_set();		//mensaje para seteo de contador
+void mensaje_avancecompac();	//avisa que la compactadora avanza
+void mensaje_retrocompac();	//avisa que la compactadora retrocede
+void mensaje_espera();		//mensaje de estado espera
+void mensaje_ciclos();		//muestra cantidad de ciclos
+
+//handler del timer
 
 void handler_100ms();
-void handler_10ms();
 
 //Definicion de puertos y elementos a utilizar
 
@@ -81,6 +87,5 @@ void handler_10ms();
 
 #define CEN avr_GPIOC_OUT_4           //PIN ENABLE 293 
 #define CEN_PIN avr_GPIO_PIN_4
-
 
 #endif
