@@ -30,3 +30,5 @@ Cuando el contenedor se llena es retirado, para que el cartón sea reciclado, y 
 
 <img width="1182" height="827" alt="image" src="https://github.com/user-attachments/assets/947a4a39-dbaf-4fcb-83f8-f096cc496107" />
 
+![Video de demostración](https://drive.google.com/file/d/12qHl1Nd3NQDtU66CwgWx4CsAhUoexdpp/view?usp=sharing)
+
