@@ -6,8 +6,9 @@ static int etapa_obstruido = 0;
 
 static int flag = 0;
 static int flag_msj = 0;
+static int flag_msj1 = 0;
 
-estados_t estado_inicio(int *cont_set0){
+estados_t estado_inicio(){
    if (!flag){
       mensaje_set();
       flag = 1;
@@ -15,30 +16,30 @@ estados_t estado_inicio(int *cont_set0){
    if (lectura_seteo() && flag) return espera;
    if (lectura_run() && flag){
       mensaje_ciclos();
-      (*cont_set0)++;
-      LCD_INT(*cont_set0);
+      cont_set++;
+      LCD_INT(cont_set);
    }
-   if (lectura_reset() && flag){
+   if (PRESET && flag){
       mensaje_ciclos();
-      (*cont_set0)--;
-      LCD_INT(*cont_set0);
+      cont_set--;
+      LCD_INT(cont_set);
    }
    return inicio;
 }
 
-estados_t estado_espera(int *cont1, int *cont_set1){ // estado de espera
-    if (!flag_msj && !(*cont1 == *cont_set1) ){
+estados_t estado_espera(){ // estado de espera
+    if (!flag_msj && !(cont == cont_set) ){
       mensaje_espera();
-      LCD_INT(*cont1);
+      LCD_INT(cont);
       flag_msj = 1;
     }
     if (lectura_nivel() == ciclo_compac) return ciclo_compac; // si detecta el nivel, cambio de estado
     if (lectura_compuerta() == deposito_obs) return deposito_obs; // si detecta el sensor de obstruccion, cambio de estado
-    if (*cont1 == *cont_set1) return deposito_lleno; // si el contador llega al limite, cambio de estado
+    if (cont == cont_set) return deposito_lleno; // si el contador llega al limite, cambio de estado
     return espera;
 }
 
-estados_t estado_ciccom(int *cont2){
+estados_t estado_ciccom(){
     switch (etapa_ciclo){
     case 0:
         if (lectura_iniciocarrera()){
@@ -58,7 +59,7 @@ estados_t estado_ciccom(int *cont2){
         if (lectura_iniciocarrera()){
             parar_motor();
             etapa_ciclo = 0;
-	    (*cont2)++;
+	    cont++;
 	    flag_msj = 0;
             return espera;
         }
@@ -99,20 +100,28 @@ estados_t estado_depobs(){
 
 estados_t estado_deplleno(){
     switch (etapa_deposito){
-    case 0: // Inicio del retroceso
+    case 0:
         if (lectura_fincarrera()){
             retroceso_compactadora();
             etapa_deposito = 1;
         }else{
             parar_motor();
+	    flag_msj1 = 0;
             etapa_deposito = 1;
         }
         break;
-    case 1: // Esperando volver al inicio
-	aviso_deplleno();
-        etapa_deposito = 0;
-	flag_msj = 0;
-        return espera;
+    case 1:
+	if (!flag_msj1){
+	    aviso_deplleno();
+	    flag_msj1 = 1;
+	}
+	if (lectura_reset()){
+	    cont = 0;
+	    etapa_deposito = 0;
+	    flag_msj = 0;
+	    aviso_depok();
+	    return espera;
+	}
         break;
     }
     return deposito_lleno;
