@@ -1,18 +1,14 @@
 #include "config.h"
 
 volatile int systick_100ms = 0;
-volatile int systick_10ms = 0;
 
 void handler_100ms(){
    systick_100ms = 1;
 }
-void handler_10ms(){
-   systick_10ms = 1;
-}
 
 void inicio_AT(){
    GpioInitStructure_AVR entradas, generico;
-   SystickInitStructure_AVR config100, config10;
+   SystickInitStructure_AVR config100;
    
    entradas.modo = avr_GPIO_mode_Input;
    entradas.port = SyP_PORT;
@@ -29,22 +25,22 @@ void inicio_AT(){
    config100.avr_systick_handler = handler_100ms;
    init_Systick_timer(config100);
    
-   config10.timernumber = avr_TIM3;	//uso el tmr1 de 16 bits
-   config10.time_ms = 10;
-   config10.avr_systick_handler = handler_10ms;
-   init_Systick_timer(config10);
+   sei();
+   LCD_CONFIG();
+   LCD_inicio();
+   LCD_CLR();
 }
 
 estados_t lectura_nivel (){			//funcion para leer los sensores de nivel y verifica si se mantiene en 10s
     static int contador = 0;			//static para mantener el valor entre llamadas
     if (systick_100ms){				//si ya contó los 100ms entonces va incrementando si los sensores leen hasta los 10 seg
-	    systick_100ms=0;
-	    if (SN1 && SN2){
-	       contador++;
-	       if (contador >= 100) return ciclo_compac;       //si se cumple, entonces cambio de estado
-	    }else{
+	 systick_100ms=0;
+	 if (SN1 && SN2){
+	    contador++;
+	    if (contador >= 100) return ciclo_compac;       //si se cumple, entonces cambio de estado
+	 }else{
 	    contador = 0;			//si no cuento los 10 segundos reseteo el contador
-	    }
+	 }
     }
     return espera;			//si no se cumple ninguna condicion vuelvo a esperar
 }
