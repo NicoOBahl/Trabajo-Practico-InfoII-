@@ -4,29 +4,12 @@ int cont = 0;
 int cont_set = -1;
 
 int main(){
-   estados_t estado = inicio; //primer estado
+   estados_t estado;  //primer estado, luego cambiar a inicio
+   estados_t (*fsm[]) (void) = {estado_inicio, estado_espera, estado_ciccom, estado_depobs, estado_deplleno};
    inicio_AT();
-   sei();
-   LCD_CONFIG();
-   LCD_inicio();
-   LCD_CLR();
-   while (1){
-      switch(estado){
-	 case inicio:
-	    estado = estado_inicio(&cont_set);
-	    break;
-	 case espera:
-	    estado = estado_espera(&cont, &cont_set);
-	    break;
-	 case ciclo_compac:
-	    estado = estado_ciccom(&cont);
-	    break;
-	 case deposito_obs:
-	    estado = estado_depobs();
-	    break;
-	 case deposito_lleno:
-	    estado = estado_deplleno();
-	    break;
-      }
-   }
+   do{
+      estado = estado_inicio();
+   } while (estado != espera);
+   while (1) estado = (*fsm[estado])();
+   return 0;
  }
